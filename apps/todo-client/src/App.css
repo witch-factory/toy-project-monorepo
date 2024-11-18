@@ -1,0 +1,54 @@
+
+.todo-app {
+  margin: 20px;
+}
+
+.todo-input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.todo-add-button {
+  padding: 5px 10px;
+  background-color: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.todo-add-button:hover {
+  background-color: darkblue;
+}
+
+.todo-list {
+  margin-top: 20px;
+  padding: 0;
+}
+
+.todo-item {
+  margin: 10px 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.todo-text {
+  cursor: pointer;
+}
+
+.todo-text.completed {
+  text-decoration: line-through;
+}
+
+.todo-delete-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.todo-delete-button:hover {
+  background-color: darkred;
+}
