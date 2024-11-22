@@ -11,7 +11,8 @@ function App() {
 	const [todos, setTodos] = useState<Todo[]>([]);
 	const [newTodoValue, setNewTodoValue] = useState<string>("");
 
-	const addTodo = () => {
+	const addTodo = (e: React.FormEvent) => {
+		e.preventDefault();
 		if (newTodoValue.trim()) {
 			setTodos([
 				...todos,
@@ -35,33 +36,51 @@ function App() {
 
 	return (
 		<main className="todo-app">
-			<h1>Todo List</h1>
-			<input
-				type="text"
-				value={newTodoValue}
-				onChange={(e) => setNewTodoValue(e.target.value)}
-				placeholder="Add a new task"
-				className="todo-input"
-			/>
-			<button onClick={addTodo} className="todo-add-button" type="button">
-				Add
-			</button>
-			<ul className="todo-list">
+			<h1>할 일 목록</h1>
+			<form onSubmit={addTodo} className="todo-form" aria-label="Add Todo Form">
+				<label htmlFor="new-todo" className="sr-only">
+					새로운 할 일
+				</label>
+				<input
+					id="new-todo"
+					type="text"
+					value={newTodoValue}
+					onChange={(e) => setNewTodoValue(e.target.value)}
+					placeholder="Add a new task"
+					className="todo-input"
+					aria-label="New Task Input"
+				/>
+				<button className="todo-add-button" type="submit">
+					추가
+				</button>
+			</form>
+			<ul className="todo-list" aria-live="polite">
 				{todos.map((todo) => (
 					<li key={todo.id} className="todo-item">
-						<span
-							onKeyDown={() => toggleTodo(todo.id)}
-							onClick={() => toggleTodo(todo.id)}
-							className={`todo-text ${todo.completed ? "completed" : ""}`}
-						>
-							{todo.text}
-						</span>
+						<div className="todo-container">
+							<input
+								id={`todo-${todo.id}`}
+								type="checkbox"
+								checked={todo.completed}
+								onChange={() => toggleTodo(todo.id)}
+								className="todo-checkbox"
+								aria-labelledby={`todo-label-${todo.id}`}
+							/>
+							<label
+								id={`todo-label-${todo.id}`}
+								htmlFor={`todo-${todo.id}`}
+								className={`todo-text ${todo.completed ? "completed" : ""}`}
+							>
+								{todo.text}
+							</label>
+						</div>
 						<button
 							type="button"
 							onClick={() => deleteTodo(todo.id)}
 							className="todo-delete-button"
+							aria-label={`Delete ${todo.text}`}
 						>
-							Delete
+							삭제
 						</button>
 					</li>
 				))}
