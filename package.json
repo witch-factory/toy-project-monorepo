@@ -4,7 +4,12 @@
 	"version": "1.0.0",
 	"description": "장난감 프로젝트들을 모아 놓은 모노레포",
 	"private": true,
+	"workspaces": {
+		"packages": ["apps/*", "libs/*"]
+	},
 	"scripts": {
+		"client": "pnpm -F @toy-monorepo/todo-client",
+		"server": "pnpm -F @toy-monorepo/todo-server",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
