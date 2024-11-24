@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { subtract } from "@toy-monorepo/shared";
 
 // 이후에 DB의 auto increment ID로 대체할 예정
 type Todo = {
@@ -37,6 +38,7 @@ function App() {
 	return (
 		<main className="todo-app">
 			<h1>할 일 목록</h1>
+			<h2>{subtract(1, 2)}</h2>
 			<form onSubmit={addTodo} className="todo-form" aria-label="Add Todo Form">
 				<label htmlFor="new-todo" className="sr-only">
 					새로운 할 일
