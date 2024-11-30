@@ -8,7 +8,7 @@ type Todo = {
 	completed: boolean;
 };
 
-function App() {
+function TodoApp() {
 	const [todos, setTodos] = useState<Todo[]>([]);
 	const [newTodoValue, setNewTodoValue] = useState<string>("");
 
@@ -91,4 +91,4 @@ function App() {
 	);
 }
 
-export default App;
+export default TodoApp;
