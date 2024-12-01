@@ -13,6 +13,17 @@ export class TodosService {
 		});
 	}
 
+	async findAllByUserId(userId: number) {
+		return this.prisma.todo.findMany({
+			where: {
+				userId,
+			},
+			orderBy: {
+				createdAt: "desc",
+			},
+		});
+	}
+
 	findAll() {
 		return this.prisma.todo.findMany({
 			include: {
@@ -37,9 +48,9 @@ export class TodosService {
 		});
 	}
 
-	remove(id: number) {
+	remove(todoId: number) {
 		return this.prisma.todo.delete({
-			where: { id },
+			where: { id: todoId },
 		});
 	}
 }
