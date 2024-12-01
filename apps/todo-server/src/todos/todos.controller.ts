@@ -23,7 +23,7 @@ import {
 	ApiResponse,
 	ApiTags,
 } from "@nestjs/swagger";
-import { Todo, User } from "@prisma/client";
+import { Todo } from "@prisma/client";
 import { TodoEntity } from "./entities/todo.entity";
 
 @ApiTags("todos")
@@ -80,6 +80,13 @@ export class TodosController {
 	}
 
 	@Delete(":todoId")
+	@ApiOperation({ summary: "todo 삭제" })
+	@ApiParam({ name: "todoId", type: "number" })
+	@ApiResponse({
+		status: 200,
+		description: "Todo deleted successfully",
+		type: TodoEntity,
+	})
 	async remove(@Param("todoId", ParseIntPipe) todoId: number) {
 		const deleted = await this.todosService.remove(todoId);
 		if (!deleted) {
