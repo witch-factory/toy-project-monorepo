@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { todoAPI } from "./api";
 
 // 이후에 DB의 auto increment ID로 대체할 예정
 type Todo = {
@@ -14,27 +15,66 @@ function TodoApp() {
 	const [editingId, setEditingId] = useState<number | null>(null);
 	const [editValue, setEditValue] = useState<string>("");
 
-	const addTodo = (e: React.FormEvent) => {
+	// 현재는 하나의 사용자만을 대상으로 하기 때문에 고정값
+	// 이후에 로그인 시스템을 만들면서 현재 로그인된 사용자의 ID로 대체할 예정
+	const userId = 1;
+
+	// Todo 목록 조회
+	const fetchTodos = useCallback(async () => {
+		if (!userId) return;
+		try {
+			const response = await todoAPI.get(`/todos?userId=${userId}`);
+			setTodos(response.data);
+		} catch (error) {
+			console.error("할 일 목록 조회 실패:", error);
+		}
+	}, []);
+
+	// 컴포넌트 마운트 시 Todo 목록 조회
+	useEffect(() => {
+		if (userId) {
+			fetchTodos();
+		}
+	}, [fetchTodos]);
+
+	const addTodo = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (newTodoValue.trim()) {
-			setTodos([
-				...todos,
-				{ id: Date.now(), text: newTodoValue, completed: false },
-			]);
+		if (!userId || !newTodoValue.trim()) {
+			alert("할 일을 입력하세요.");
+			return;
+		}
+
+		try {
+			const response = await todoAPI.post("/todos", {
+				title: newTodoValue.trim(),
+				userId: userId,
+				completed: false,
+			});
+			setTodos([...todos, response.data]);
 			setNewTodoValue("");
+		} catch (error) {
+			console.error("할 일 추가 실패:", error);
 		}
 	};
 
-	const toggleTodo = (id: number) => {
-		setTodos(
-			todos.map((todo) =>
-				todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-			),
-		);
+	const toggleTodo = async (todo: Todo) => {
+		try {
+			const response = await todoAPI.patch(`/todos/${todo.id}`, {
+				completed: !todo.completed,
+			});
+			setTodos(todos.map((t) => (t.id === todo.id ? response.data : t)));
+		} catch (error) {
+			console.error("할 일 상태 변경 실패:", error);
+		}
 	};
 
-	const deleteTodo = (id: number) => {
-		setTodos(todos.filter((todo) => todo.id !== id));
+	const deleteTodo = async (id: number) => {
+		try {
+			await todoAPI.delete(`/todos/${id}`);
+			setTodos(todos.filter((todo) => todo.id !== id));
+		} catch (error) {
+			console.error("할 일 삭제 실패:", error);
+		}
 	};
 
 	// 편집 모드 시작
@@ -44,15 +84,20 @@ function TodoApp() {
 	};
 
 	// 편집 저장
-	const saveEdit = () => {
+	const saveEdit = async () => {
 		if (editingId === null) return;
 
-		setTodos(
-			todos.map((todo) =>
-				todo.id === editingId ? { ...todo, text: editValue.trim() } : todo,
-			),
-		);
-		cancelEdit();
+		try {
+			const response = await todoAPI.patch(`/todos/${editingId}`, {
+				title: editValue.trim(),
+			});
+			setTodos(
+				todos.map((todo) => (todo.id === editingId ? response.data : todo)),
+			);
+			cancelEdit();
+		} catch (error) {
+			console.error("할 일 수정 실패:", error);
+		}
 	};
 
 	// 편집 취소
@@ -84,7 +129,7 @@ function TodoApp() {
 								id={`todo-${todo.id}`}
 								type="checkbox"
 								checked={todo.completed}
-								onChange={() => toggleTodo(todo.id)}
+								onChange={() => toggleTodo(todo)}
 							/>
 							{editingId === todo.id ? (
 								// 편집 모드
