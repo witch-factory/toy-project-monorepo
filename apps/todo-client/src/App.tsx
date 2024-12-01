@@ -4,7 +4,7 @@ import { todoAPI } from "./api";
 // 이후에 DB의 auto increment ID로 대체할 예정
 type Todo = {
 	id: number;
-	text: string;
+	title: string;
 	completed: boolean;
 };
 
@@ -80,7 +80,7 @@ function TodoApp() {
 	// 편집 모드 시작
 	const startEdit = (todo: Todo) => {
 		setEditingId(todo.id);
-		setEditValue(todo.text);
+		setEditValue(todo.title);
 	};
 
 	// 편집 저장
@@ -167,12 +167,12 @@ function TodoApp() {
 												: undefined
 										}
 									>
-										{todo.text}
+										{todo.title}
 									</label>
 									<button
 										type="button"
 										onClick={() => startEdit(todo)}
-										aria-label={`Edit ${todo.text}`}
+										aria-label={`Edit ${todo.title}`}
 									>
 										수정
 									</button>
@@ -182,7 +182,7 @@ function TodoApp() {
 						<button
 							type="button"
 							onClick={() => deleteTodo(todo.id)}
-							aria-label={`Delete ${todo.text}`}
+							aria-label={`Delete ${todo.title}`}
 						>
 							삭제
 						</button>
