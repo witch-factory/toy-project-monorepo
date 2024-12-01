@@ -8,8 +8,8 @@
 		"packages": ["apps/*", "libs/*"]
 	},
 	"scripts": {
-		"client": "pnpm -F @toy-monorepo/todo-client",
-		"server": "pnpm -F @toy-monorepo/todo-server",
+		"front": "pnpm -F @toy-monorepo/todo-client",
+		"back": "pnpm -F @toy-monorepo/todo-server",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
