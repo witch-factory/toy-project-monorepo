@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { subtract } from "@toy-monorepo/shared";
 
 // 이후에 DB의 auto increment ID로 대체할 예정
 type Todo = {
@@ -11,6 +10,9 @@ type Todo = {
 function TodoApp() {
 	const [todos, setTodos] = useState<Todo[]>([]);
 	const [newTodoValue, setNewTodoValue] = useState<string>("");
+	// 편집중이 아니라면 null, 편집중이라면 해당 Todo의 ID
+	const [editingId, setEditingId] = useState<number | null>(null);
+	const [editValue, setEditValue] = useState<string>("");
 
 	const addTodo = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -35,51 +37,106 @@ function TodoApp() {
 		setTodos(todos.filter((todo) => todo.id !== id));
 	};
 
+	// 편집 모드 시작
+	const startEdit = (todo: Todo) => {
+		setEditingId(todo.id);
+		setEditValue(todo.text);
+	};
+
+	// 편집 저장
+	const saveEdit = () => {
+		if (editingId === null) return;
+
+		setTodos(
+			todos.map((todo) =>
+				todo.id === editingId ? { ...todo, text: editValue.trim() } : todo,
+			),
+		);
+		cancelEdit();
+	};
+
+	// 편집 취소
+	const cancelEdit = () => {
+		setEditingId(null);
+		setEditValue("");
+	};
+
 	return (
-		<main className="todo-app">
+		<main>
 			<h1>할 일 목록</h1>
-			<h2>{subtract(1, 2)}</h2>
-			<form onSubmit={addTodo} className="todo-form" aria-label="Add Todo Form">
-				<label htmlFor="new-todo" className="sr-only">
-					새로운 할 일
-				</label>
+			<form onSubmit={addTodo} aria-label="Add Todo Form">
+				<label htmlFor="new-todo">새로운 할 일</label>
 				<input
 					id="new-todo"
 					type="text"
 					value={newTodoValue}
 					onChange={(e) => setNewTodoValue(e.target.value)}
-					placeholder="Add a new task"
-					className="todo-input"
+					placeholder="New Task"
 					aria-label="New Task Input"
 				/>
-				<button className="todo-add-button" type="submit">
-					추가
-				</button>
+				<button type="submit">추가</button>
 			</form>
-			<ul className="todo-list" aria-live="polite">
+			<ul aria-live="polite">
 				{todos.map((todo) => (
-					<li key={todo.id} className="todo-item">
-						<div className="todo-container">
+					<li key={todo.id}>
+						<div>
 							<input
 								id={`todo-${todo.id}`}
 								type="checkbox"
 								checked={todo.completed}
 								onChange={() => toggleTodo(todo.id)}
-								className="todo-checkbox"
-								aria-labelledby={`todo-label-${todo.id}`}
 							/>
-							<label
-								id={`todo-label-${todo.id}`}
-								htmlFor={`todo-${todo.id}`}
-								className={`todo-text ${todo.completed ? "completed" : ""}`}
-							>
-								{todo.text}
-							</label>
+							{editingId === todo.id ? (
+								// 편집 모드
+								<div>
+									<input
+										type="text"
+										value={editValue}
+										onChange={(e) => setEditValue(e.target.value)}
+										aria-label="Edit todo text"
+									/>
+									<button
+										type="button"
+										onClick={saveEdit}
+										aria-label="Save edit"
+									>
+										저장
+									</button>
+									<button
+										type="button"
+										onClick={cancelEdit}
+										aria-label="Cancel edit"
+									>
+										취소
+									</button>
+								</div>
+							) : (
+								// 일반 모드
+								<>
+									<label
+										id={`todo-label-${todo.id}`}
+										htmlFor={`todo-${todo.id}`}
+										style={
+											todo.completed
+												? { textDecoration: "line-through" }
+												: undefined
+										}
+									>
+										{todo.text}
+									</label>
+									<button
+										type="button"
+										onClick={() => startEdit(todo)}
+										aria-label={`Edit ${todo.text}`}
+									>
+										수정
+									</button>
+								</>
+							)}
 						</div>
 						<button
 							type="button"
 							onClick={() => deleteTodo(todo.id)}
-							className="todo-delete-button"
 							aria-label={`Delete ${todo.text}`}
 						>
 							삭제
