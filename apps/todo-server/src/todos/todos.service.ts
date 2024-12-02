@@ -13,7 +13,7 @@ export class TodosService {
 		});
 	}
 
-	async findAllByUserId(userId: number) {
+	findAllByUserId(userId: number) {
 		return this.prisma.todo.findMany({
 			where: {
 				userId,
@@ -32,18 +32,18 @@ export class TodosService {
 		});
 	}
 
-	findOne(id: number) {
+	findOne(todoId: number) {
 		return this.prisma.todo.findUnique({
-			where: { id },
+			where: { id: todoId },
 			include: {
 				user: true,
 			},
 		});
 	}
 
-	update(id: number, updateTodoDto: UpdateTodoDto) {
+	update(todoId: number, updateTodoDto: UpdateTodoDto) {
 		return this.prisma.todo.update({
-			where: { id },
+			where: { id: todoId },
 			data: updateTodoDto,
 		});
 	}
