@@ -14,7 +14,6 @@ async function bootstrap() {
 		.setTitle("Todo API")
 		.setDescription("Todo CRUD API documentation")
 		.setVersion("1.0")
-		.addTag("todos") // 태그 추가
 		.build();
 
 	const documentFactory = () => SwaggerModule.createDocument(app, config);
