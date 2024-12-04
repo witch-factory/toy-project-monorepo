@@ -7,50 +7,40 @@ import { PrismaService } from "src/prisma.service";
 export class TodosService {
 	constructor(private prisma: PrismaService) {}
 
-	create(createTodoDto: CreateTodoDto) {
-		return this.prisma.todo.create({
-			data: createTodoDto,
-		});
+	createTodo(createTodoDto: CreateTodoDto) {
+		return this.prisma.todo.create({ data: createTodoDto });
 	}
 
-	findAllByUserId(userId: number) {
+	findTodosByUser(userId: number) {
 		return this.prisma.todo.findMany({
 			where: {
 				userId,
 			},
-			orderBy: {
-				createdAt: "desc",
-			},
 		});
 	}
 
-	findAll() {
-		return this.prisma.todo.findMany({
-			include: {
-				user: true,
-			},
-		});
-	}
-
-	findOne(todoId: number) {
+	findTodo(todoId: number) {
 		return this.prisma.todo.findUnique({
-			where: { id: todoId },
-			include: {
-				user: true,
+			where: {
+				id: todoId,
 			},
 		});
 	}
 
-	update(todoId: number, updateTodoDto: UpdateTodoDto) {
+	updateTodo(todoId: number, updateData: UpdateTodoDto) {
 		return this.prisma.todo.update({
-			where: { id: todoId },
-			data: updateTodoDto,
+			where: {
+				id: todoId,
+			},
+			data: updateData,
 		});
 	}
 
-	remove(todoId: number) {
+	removeTodo(todoId: number) {
 		return this.prisma.todo.delete({
-			where: { id: todoId },
+			where: {
+				id: todoId,
+			},
 		});
 	}
 }
