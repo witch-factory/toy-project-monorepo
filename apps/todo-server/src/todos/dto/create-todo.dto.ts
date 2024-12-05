@@ -15,7 +15,7 @@ export class CreateTodoDto {
 	@IsOptional()
 	@IsBoolean({ message: "Completed는 true 또는 false여야 합니다." })
 	@Transform(({ value }) => value === "true" || value === true) // 'true' 문자열도 boolean으로 변환
-	completed: boolean;
+	completed?: boolean;
 
 	@IsInt({ message: "UserId는 정수여야 합니다." })
 	@Type(() => Number) // 숫자로 변환
