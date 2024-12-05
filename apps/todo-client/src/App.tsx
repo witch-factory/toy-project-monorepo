@@ -1,15 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { todoAPI } from "./api";
-
-// 이후에 DB의 auto increment ID로 대체할 예정
-type Todo = {
-	id: number;
-	title: string;
-	completed: boolean;
-};
+import { CreateTodoDto, todoAPI, TodoEntity, UpdateTodoDto } from "./api";
 
 function TodoApp() {
-	const [todos, setTodos] = useState<Todo[]>([]);
+	const [todos, setTodos] = useState<TodoEntity[]>([]);
 	const [newTodoValue, setNewTodoValue] = useState<string>("");
 	// 편집중이 아니라면 null, 편집중이라면 해당 Todo의 ID
 	const [editingId, setEditingId] = useState<number | null>(null);
@@ -23,8 +16,11 @@ function TodoApp() {
 	const fetchTodos = useCallback(async () => {
 		if (!userId) return;
 		try {
-			const response = await todoAPI.get(`/todos?userId=${userId}`);
+			const response = await todoAPI.get<TodoEntity[]>("/todos", {
+				params: { userId },
+			});
 			setTodos(response.data);
+			console.log(response.data);
 		} catch (error) {
 			console.error("할 일 목록 조회 실패:", error);
 		}
@@ -45,11 +41,12 @@ function TodoApp() {
 		}
 
 		try {
-			const response = await todoAPI.post("/todos", {
+			const data: CreateTodoDto = {
 				title: newTodoValue.trim(),
-				userId: userId,
+				userId,
 				completed: false,
-			});
+			};
+			const response = await todoAPI.post<TodoEntity>("/todos", data);
 			setTodos([...todos, response.data]);
 			setNewTodoValue("");
 		} catch (error) {
@@ -57,11 +54,13 @@ function TodoApp() {
 		}
 	};
 
-	const toggleTodo = async (todo: Todo) => {
+	const toggleTodo = async (todo: TodoEntity) => {
 		try {
-			const response = await todoAPI.patch(`/todos/${todo.id}`, {
-				completed: !todo.completed,
-			});
+			const data: UpdateTodoDto = { completed: !todo.completed };
+			const response = await todoAPI.patch<TodoEntity>(
+				`/todos/${todo.id}`,
+				data,
+			);
 			setTodos(todos.map((t) => (t.id === todo.id ? response.data : t)));
 		} catch (error) {
 			console.error("할 일 상태 변경 실패:", error);
@@ -78,7 +77,7 @@ function TodoApp() {
 	};
 
 	// 편집 모드 시작
-	const startEdit = (todo: Todo) => {
+	const startEdit = (todo: TodoEntity) => {
 		setEditingId(todo.id);
 		setEditValue(todo.title);
 	};
@@ -88,9 +87,11 @@ function TodoApp() {
 		if (editingId === null) return;
 
 		try {
-			const response = await todoAPI.patch(`/todos/${editingId}`, {
-				title: editValue.trim(),
-			});
+			const data: UpdateTodoDto = { title: editValue.trim() };
+			const response = await todoAPI.patch<TodoEntity>(
+				`/todos/${editingId}`,
+				data,
+			);
 			setTodos(
 				todos.map((todo) => (todo.id === editingId ? response.data : todo)),
 			);
