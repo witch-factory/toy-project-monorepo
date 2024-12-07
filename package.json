@@ -10,6 +10,7 @@
 	"scripts": {
 		"front": "pnpm -F @toy-monorepo/todo-client",
 		"back": "pnpm -F @toy-monorepo/todo-server",
+		"shared": "pnpm -F @toy-monorepo/shared",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
