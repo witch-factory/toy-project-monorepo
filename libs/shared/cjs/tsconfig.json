@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "CommonJS",
+		"moduleResolution": "node",
+		"outDir": "./",
+		"declarationDir": "./types" // .d.ts 파일이 생성될 위치
+	}
+}

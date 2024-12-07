@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ES2020",
+		"moduleResolution": "node",
+		"outDir": "./",
+		"declarationDir": "./types" // .d.ts 파일이 생성될 위치
+	}
+}
