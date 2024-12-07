@@ -2,17 +2,25 @@
 	"name": "@toy-monorepo/shared",
 	"version": "1.0.0",
 	"description": "",
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "./cjs/index.js",
+	"module": "./esm/index.js",
+	"types": "./cjs/schema.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
+			"require": {
+				"types": "./cjs/schema.d.ts",
+				"default": "./cjs/index.js"
+			},
+			"import": {
+				"types": "./esm/schema.d.ts",
+				"default": "./esm/index.js"
+			}
 		}
 	},
 	"scripts": {
-		"build": "tsc",
+		"build:cjs": "tsc --p ./cjs/tsconfig.json",
+		"build:esm": "tsc --p ./esm/tsconfig.json",
+		"build": "pnpm run build:esm && pnpm run build:cjs",
 		"dev": "tsc -w"
 	}
 }
