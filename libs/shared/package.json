@@ -4,15 +4,15 @@
 	"description": "",
 	"main": "./cjs/index.js",
 	"module": "./esm/index.js",
-	"types": "./cjs/schema.d.ts",
+	"types": "./cjs/types/schema.d.ts",
 	"exports": {
 		".": {
 			"require": {
-				"types": "./cjs/schema.d.ts",
+				"types": "./cjs/types/schema.d.ts",
 				"default": "./cjs/index.js"
 			},
 			"import": {
-				"types": "./esm/schema.d.ts",
+				"types": "./esm/types/schema.d.ts",
 				"default": "./esm/index.js"
 			}
 		}

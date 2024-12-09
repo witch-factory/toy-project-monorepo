@@ -1,0 +1,16 @@
+{
+	"name": "test",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node --es-module-specifier-resolution=node index.js"
+	},
+	"dependencies": {
+		"@toy-monorepo/shared": "workspace:*"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
