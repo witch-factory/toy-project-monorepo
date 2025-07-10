@@ -3,11 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <link rel="stylesheet" href="/style.css">
+  <title>{{ title }}</title>
 </head>
 <body>
   <header>
-    <h1>데이터 폴더 레이아웃</h1>
+    <nav class="header-menu">
+      <h1><a href="/">마녀 아카이브</a></h1>
+      <a href="/til/">TIL</a>
+      <a href="/scrap/">스크랩</a>
+      <a href="/books/">책</a>
+    </nav>
+    <menu class="header-menu">
+      <li>
+        <a href="https://github.com/witch-factory" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
+      </li>
+      <li>
+        <button id="theme-toggle" aria-label="Toggle theme">
+          <span class="icon">🌙</span>
+          <span class="icon">☀️</span>
+        </button>
+      </li>
+    </menu>
   </header>
   <main>
     {{ content }}
