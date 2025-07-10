@@ -21,7 +21,6 @@ body {
 }
 
 main {
-  max-width: 50rem;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -63,4 +62,27 @@ code {
   background-color: var(--color-code-bg);
   padding: 0.2rem;
   font-family: monospace;
+}
+
+.layout {
+  display: flex;
+  padding: 1rem;
+  gap: 2rem;
+}
+
+.sidebar {
+  flex: 0 0 200px;
+  border-right: 1px solid var(--color-border);
+  padding-right: 1rem;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content {
+  max-width: 60rem;
+  margin: 0 auto;
 }

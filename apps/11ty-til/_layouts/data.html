@@ -1,35 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/style.css">
-  <title>{{ title }}</title>
-</head>
-<body>
-  <header>
-    <nav class="header-menu">
-      <h1><a href="/">마녀 아카이브</a></h1>
-      <a href="/til/">TIL</a>
-      <a href="/scrap/">스크랩</a>
-      <a href="/books/">책</a>
-    </nav>
-    <menu class="header-menu">
+---
+layout: main.html
+---
+
+{% if showSidebar != false %}
+<aside class="sidebar">
+  <ul class="sidebar-list">
+    {% for item in collections.til %}
       <li>
-        <a href="https://github.com/witch-factory" target="_blank" rel="noopener noreferrer">
-          GitHub
-        </a>
+        <!-- url을 slug 기반으로 변경하거나 암튼 frontmatter에는 URL이 없으니 처리해야 함 -->
+        <a href="{{ item.url }}">{{ item.data.title }}</a>
       </li>
-      <li>
-        <button id="theme-toggle" aria-label="Toggle theme">
-          <span class="icon">🌙</span>
-          <span class="icon">☀️</span>
-        </button>
-      </li>
-    </menu>
-  </header>
-  <main>
-    {{ content }}
-  </main>
-</body>
-</html>
+    {% endfor %}
+  </ul>
+</aside>
+{% endif %}
+
+<article class="content">
+  {{ content }}
+</article>
