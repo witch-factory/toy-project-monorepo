@@ -180,9 +180,8 @@ export const getMe = (
   req: Request<{}, {}, { user: UserResponse }>,
   res: Response
 ): void => {
-  const authenticatedReq = req;
   res.json({
     success: true,
-    data: authenticatedReq.body.user,
+    data: req.user,
   } as ApiResponse<UserResponse>);
 };
